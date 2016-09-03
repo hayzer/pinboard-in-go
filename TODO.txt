@@ -1,0 +1,5 @@
+* define and implement proper output for all commands
+* split code into modules
+* add unit tests
+* add short options for the flags
+* add autocompletion
