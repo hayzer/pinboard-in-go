@@ -21,10 +21,6 @@ var (
 		"A command line client for pinboard.in bookmarks service").
 		Author("Thomas Maier").
 		Version("0.001")
-	username = app.Flag("username", "Pinboard username (default: $PINBOARD_USERNAME).").
-			PlaceHolder("PINBOARD-USERNAME").
-			Envar("PINBOARD_USERNAME").
-			String()
 	token = app.Flag("token", "Pinboard API Token (default: $PINBOARD_API_TOKEN).").
 		PlaceHolder("PINBOARD-API-TOKEN").
 		Envar("PINBOARD_API_TOKEN").
@@ -129,10 +125,9 @@ type UrlArgs struct {
 }
 
 func (u UrlArgs) BuildUrl() string {
-	return fmt.Sprintf("%s/%s?auth_token=%s:%s&format=json&%s",
+	return fmt.Sprintf("%s/%s?auth_token=%s&format=json&%s",
 		base_url,
 		u.ResourceUri,
-		*username,
 		*token,
 		u.Params,
 	)
@@ -144,6 +139,7 @@ func HttpGet(url string) []uint8 {
 	}
 	client := &http.Client{Transport: tr}
 	resp, err := client.Get(url)
+	log.Print("Requesting url: ", url)
 	if err != nil {
 		panic("Can't access pinboard API server")
 	}
